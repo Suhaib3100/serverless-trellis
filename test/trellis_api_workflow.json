@@ -1,0 +1,63 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "input.png"
+    }
+  },
+  "2": {
+    "class_type": "LoadTrellis2Models",
+    "inputs": {
+      "resolution": "512"
+    }
+  },
+  "3": {
+    "class_type": "RMBG",
+    "inputs": {
+      "image": ["1", 0],
+      "model": "BEN2",
+      "process_res": 1024,
+      "sensitivity": 1.0,
+      "mask_blur": 0,
+      "mask_offset": 0,
+      "background": "Alpha",
+      "invert_output": false,
+      "refine_foreground": false
+    }
+  },
+  "4": {
+    "class_type": "Trellis2GetConditioning",
+    "inputs": {
+      "model_config": ["2", 0],
+      "image": ["3", 0],
+      "mask": ["3", 1]
+    }
+  },
+  "5": {
+    "class_type": "Trellis2ImageToShape",
+    "inputs": {
+      "model_config": ["2", 0],
+      "conditioning": ["4", 0],
+      "seed": 42,
+      "ss_guidance_strength": 7.5,
+      "ss_sampling_steps": 12,
+      "shape_guidance_strength": 3.0,
+      "shape_sampling_steps": 12
+    }
+  },
+  "7": {
+    "class_type": "Trellis2RenderPreview",
+    "inputs": {
+      "trimesh": ["5", 1],
+      "num_views": 4,
+      "resolution": 512,
+      "render_mode": "normal"
+    }
+  },
+  "8": {
+    "class_type": "PreviewImage",
+    "inputs": {
+      "images": ["7", 0]
+    }
+  }
+}
